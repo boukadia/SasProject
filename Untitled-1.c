@@ -24,13 +24,16 @@ int CountDep=0;
 void menu(){
 
     printf("---------------< MENU >---------------\n");
+    printf("0) sortir \n");
     printf("1) Ajouter un etudiant\n");
-
     printf("2) modifier les informations d'un etudiant\n");
-    printf("3) Afficher les details d'un etudiant \n");
-    printf("4) suprimer les details d'un etudiant \n");
+    printf("3) suprimer les details d'un etudiant \n");
+    printf("4) Afficher les details d'un etudiant \n");
     printf("5) La moyenne generale\n");
     printf("6) Statistique\n");
+    printf("7) Recherche un etudiant par son nom\n");
+    printf("8) recherche un etudiant par son departement\n");
+    printf("9) trier un etudiant par \n");
     printf("----------------------------------------\n");
     printf("Tapez votre choix:\t");
     scanf("%d", &choix);
@@ -45,7 +48,7 @@ void ajouter(){
     scanf(" %[^\n]s", &etudiant[i].prenom);
     printf("la date de naissance(j/m/ans): \n");
     scanf("%d %d %d",&etudiant[i].date_de_naissance.jour, &etudiant[i].date_de_naissance.mois, &etudiant[i].date_de_naissance.annee);
-    printf("le note generale: \t");
+    printf("La  note generale: \t");
     scanf("%f", &etudiant[i].note_generale);
     printf("departement: \t");
     scanf(" %[^\n]s", &etudiant[i].departement);
@@ -53,6 +56,33 @@ void ajouter(){
     etudiant[i].nombre_unique =  nbr_total;
     i++;
 
+}
+
+void Rech_Departement() {
+    int i, count = 0;
+    char rech[50];
+    printf("Tapez le departement : ");
+    scanf(" %[^\n]s", rech);
+
+    for (i = 0; i < nbr_total; i++) {
+        if (strcmp(rech, etudiant[i].departement) == 0) {
+            if (count != 0)
+             {
+                printf("La liste des etudiants du departement : %s\n", rech);
+             }
+            printf("L'étudiant numero %d : \n", etudiant[i].nombre_unique);
+            printf("Nom et prenom :        %s %s\n", etudiant[i].nom, etudiant[i].prenom);
+            printf("La Note générale :     %f\n", etudiant[i].note_generale);
+            printf("La date de naissance : %d %d %d\n", etudiant[i].date_de_naissance.jour, etudiant[i].date_de_naissance.mois, etudiant[i].date_de_naissance.annee);
+            count++;
+        }
+    }
+
+    if (count == 0) {
+        printf("Aucun etudiant trouve dans ce departement!\n");
+    }
+
+    printf("\n");
 }
 
 
@@ -68,15 +98,8 @@ int verification(){
         }
     }
         return -1;
-
-
 }
-//Afficher le nombre total d'étudiants inscrits.
-// Afficher le nombre total d'étudiants inscrits.
 
-// Afficher le nombre d'étudiants dans chaque département.
-
-//Afficher les étudiants ayant une moyenne générale supérieure à un certain seuil
 void Modifier() {
     int found=0;
     verification();
@@ -122,6 +145,12 @@ void Supprime(){
     else
         printf(" le numero n'existe pas !\n");
 }
+
+void affichage_NbrTotal_etud(){
+  printf("%d\n",nbr_total);
+
+}
+
 void  Aff_etu_SUP_seuil(){
    int seuil;
    printf ("choisir une seuil : ");
@@ -134,6 +163,35 @@ void  Aff_etu_SUP_seuil(){
     }
 }
 
+void AffNomReusParDep() {
+    char departements[100][50];                         // Tableau pour stocker les noms des départements
+    int nombres_reussite[100] = {0};                     // Tableau pour stocker les comptes d'étudiants ayant réussi dans chaque département
+    int nb_departements = 0;
+
+                                                         // Remplir les departements et compter les reussit
+    for (int i = 0; i < nbr_total; i++) {
+        if (etudiant[i].note_generale >= 10) {           // On considere comme reussi si la note est >= 10
+            int j;
+            for (j = 0; j < nb_departements; j++) {
+                if (strcmp(departements[j], etudiant[i].departement) == 0) {
+                    nombres_reussite[j]++;
+                    break;
+                }
+            }
+            if (j == nb_departements) {
+                strcpy(departements[nb_departements], etudiant[i].departement);
+                nombres_reussite[nb_departements] = 1;
+                nb_departements++;
+            }
+        }
+    }
+
+    // Afficher les résultats
+    printf("Nombre d'etudiants ayant reussi dans chaque departement :\n");
+    for (int i = 0; i < nb_departements; i++) {
+        printf("Departement %s : %d etudiant(s) ayant reussi\n", departements[i], nombres_reussite[i]);
+    }
+}
 void moyenneGeneralTotal()
 {
     int total_departements=0;
@@ -182,7 +240,7 @@ void moyenneGeneralTotal()
 
       }
       float moyenne_generale = somme_generale/total_departements;
-    printf("Moyenne generale de tous les départements: %.2f\n", moyenne_generale);
+    printf("Moyenne generale de tous les departements: %.2f\n", moyenne_generale);
 }
 void Affichage_Liste_etudient(){
     for(i=0;i<nbr_total;i++){
@@ -247,46 +305,138 @@ void Rech_nom()                         //recherche
     }
         printf("\n");
 }
-void Rech_Departement() {
-    int i, count = 0;
-    char rech[50];
-    printf("Tapez le département : ");
-    scanf(" %[^\n]s", rech);
+void TriEtudParNom() {
+    list_etudiant temp;
+    for (int i = 0; i < nbr_total - 1; i++) {
+        for (int j = i + 1; j < nbr_total; j++) {
+            if (strcmp(etudiant[i].nom, etudiant[j].nom) > 0) {
+                                                  // Échanger les étudiants[i] et étudiants[j]
+                temp = etudiant[i];
+                etudiant[i] = etudiant[j];
+                etudiant[j] = temp;
+            }
+        }
+    }
+}
+void TriEtudParNote() {
+    list_etudiant temp;
+    for (int i = 0; i < nbr_total - 1; i++) {
+        for (int j = i + 1; j < nbr_total; j++) {
+            if (etudiant[i].note_generale < etudiant[j].note_generale) {
+                                                    // echanger les etudiants[i] et etudiants[j]
+                temp = etudiant[i];
+                etudiant[i] = etudiant[j];
+                etudiant[j] = temp;
+            }
+        }
+    }
+}
+void Aff_Nbr_Etud_Deppa() {
+    char departements[100][50];                      // Tableau de stocker les noms des departements
+    int nombres[100] = {0};                          // Tableau de stocker les comptes d'etudiants de chaque departement
+    int nb_departements = 0;
 
-    for (i = 0; i < nbr_total; i++) {
-        if (strcmp(rech, etudiant[i].departement) == 0) {
-            if (count != 0)
-             {
-                printf("La liste des étudiants du département : %s\n", rech);
-             }
-            printf("L'étudiant numero %d : \n", etudiant[i].nombre_unique);
-            printf("Nom et prenom :        %s %s\n", etudiant[i].nom, etudiant[i].prenom);
-            printf("La Note générale :     %f\n", etudiant[i].note_generale);
-            printf("La date de naissance : %d %d %d\n", etudiant[i].date_de_naissance.jour, etudiant[i].date_de_naissance.mois, etudiant[i].date_de_naissance.annee);
+                                                    // Remplir les departements
+    for (int i = 0; i < nbr_total; i++) {
+        int j;
+        for (j = 0; j < nb_departements; j++) {
+            if (strcmp(departements[j], etudiant[i].departement) == 0) {
+                nombres[j]++;
+                break;
+            }
+        }
+        if (j == nb_departements) {
+            strcpy(departements[nb_departements], etudiant[i].departement);
+            nombres[nb_departements] = 1;
+            nb_departements++;
+        }
+    }
+
+    // Afficher les résultats
+    printf("Nombre d'etudiants dans chaque departement :\n");
+    for (int i = 0; i < nb_departements; i++) {
+        printf("Departement %s : %d etudiant(s)\n", departements[i], nombres[i]);
+    }
+}
+
+void Affich_PreM3() {
+    if (nbr_total < 3) {
+        printf("Il y a moins de 3 étudiants dans la liste.\n");
+        return;
+    }
+
+                                                         // Trier les etudiants par note (ordre decroissant)
+    list_etudiant temp;
+    for (int i = 0; i < nbr_total - 1; i++) {
+        for (int j = i + 1; j < nbr_total; j++) {
+            if (etudiant[i].note_generale < etudiant[j].note_generale) {
+                                                        // echanger les etudiants[i] et étudiants[j]
+                temp = etudiant[i];
+                etudiant[i] = etudiant[j];
+                etudiant[j] = temp;
+            }
+        }
+    }
+
+                                                          // Afficher les trois premiers etudiants
+    printf("Les 3 étudiants ayant les meilleures notes sont :\n");
+    for (int i = 0; i < 3; i++) {
+        printf("-----------------------< L'etudiant %d >-------------------------------\n", etudiant[i].nombre_unique);
+        printf("Nom:                      %s\n", etudiant[i].nom);
+        printf("Prenom:                   %s\n", etudiant[i].prenom);
+        printf("Note generale:            %.2f\n", etudiant[i].note_generale);
+        printf("Date de naissance:        %d %d %d\n", etudiant[i].date_de_naissance.jour, etudiant[i].date_de_naissance.mois, etudiant[i].date_de_naissance.annee);
+        printf("Departement:              %s\n", etudiant[i].departement);
+    }
+}
+
+void TriEtudParNoteSUP10() {
+    list_etudiant etudiants_sup_10[500]; // Tableau temporaire pour stocker les etudiants avec note > 10
+    int count = 0;
+
+    // Filtrer les etudiants avec une note superieure à 10
+    for (int i = 0; i < nbr_total; i++) {
+        if (etudiant[i].note_generale > 10) {
+            etudiants_sup_10[count] = etudiant[i];
             count++;
         }
     }
 
-    if (count == 0) {
-        printf("Aucun étudiant trouvé dans ce département!\n");
+    // Trier les etudiants avec note > 10 par leur note (ordre decroissant)
+    list_etudiant temp;
+    for (int i = 0; i < count - 1; i++) {
+        for (int j = i + 1; j < count; j++) {
+            if (etudiants_sup_10[i].note_generale < etudiants_sup_10[j].note_generale) {
+                                                          // echanger les etudiants[i] et etudiants[j]
+                temp = etudiants_sup_10[i];
+                etudiants_sup_10[i] = etudiants_sup_10[j];
+                etudiants_sup_10[j] = temp;
+            }
+        }
     }
 
-    printf("\n");
+                                                                        // Afficher les résultats
+    printf("Liste des etudiants avec une note superieure à 10, tri par note (ordre decroissant) :\n");
+    for (int i = 0; i < count; i++) {
+        printf("-----------------------< L'etudiant %d >-------------------------------\n", etudiants_sup_10[i].nombre_unique);
+        printf("Nom:                      %s\n", etudiants_sup_10[i].nom);
+        printf("Prenom:                   %s\n", etudiants_sup_10[i].prenom);
+        printf("Note generale:            %.2f\n", etudiants_sup_10[i].note_generale);
+        printf("Date de naissance:        %d %d %d\n", etudiants_sup_10[i].date_de_naissance.jour, etudiants_sup_10[i].date_de_naissance.mois, etudiants_sup_10[i].date_de_naissance.annee);
+        printf("Departement:              %s\n", etudiants_sup_10[i].departement);
+    }
 }
 
-void affichage_NbrTotal_etud(){
-  printf("%d\n",nbr_total);
-
-}
 
 
 int main(){
-
+int option;
    do
     {
         menu();
 
-        switch (choix){
+        switch (choix)
+        {
         case 1: ajouter();
             break;
 
@@ -294,15 +444,14 @@ int main(){
            break;
          case 3: Supprime();
          break;
-         case 4:  {
-                  printf(" la liste d'etudiant est :\n");
-                  Affichage_Liste_etudient();
-                  }
-                break;
+         case 4:
+             {
+                 printf(" la liste d'etudiant est :\n");
+                 Affichage_Liste_etudient();
+             }
+         break;
          case 5 : moyenneGeneralTotal() ;
-            break;
-            case 9 :affichage_NbrTotal_etud();
-            break;
+         break;
 
          case 6 :
          {
@@ -323,13 +472,13 @@ int main(){
            switch(OptionChoix){
             case 1 : affichage_NbrTotal_etud();
             break;
-            case 2 :
+            case 2 : Aff_Nbr_Etud_Deppa();
             break;
             case 3 : Aff_etu_SUP_seuil();
             break;
-            case 4 :
+            case 4 : Affich_PreM3();
             break;
-            case 5 :
+            case 5 : AffNomReusParDep();
             break;
             case 0 : printf("sortir");
             break;
@@ -343,13 +492,52 @@ int main(){
 
          case 7: Rech_nom()  ;
          break;
-       case 8: Rech_Departement();
+
+         case 8: Rech_Departement();
+         break;
+         case 9 :
+             {
+
+               int Option;
+            do
+        {
+          printf("---------------< MENU >---------------\n");
+          printf("1) Trier les etudiants par son nom\n");
+          printf("2) Trier les etudiants par son notes\n");
+          printf("3) Afficher les etudians ayant une note general superieur a une seuil \n");
+          printf("Choisissez une option : ");
+          scanf("%d", &Option);
+           switch(Option)
+           {
+            case 0 : printf("sortir");
             break;
+            case 1 : TriEtudParNom();
+                     printf("La liste des étudiants triée par nom est :\n");
+                     Affichage_Liste_etudient();
+            break;
+
+            case 2 : TriEtudParNote();
+                     printf("La liste d'etudiants est :\n");
+                     Affichage_Liste_etudient();
+            break;
+            case 3 : TriEtudParNoteSUP10();
+            break;
+
+            default : printf("incorrecte choix!");
+            break;
+
+            }
+         }while (option!=0);
+
+        break;
+
+                 }
         default:
         printf("Oops !!\n");
             break;
         }
     } while (choix != 0);
+
 return 0;
 
 }
