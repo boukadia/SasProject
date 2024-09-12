@@ -28,7 +28,7 @@ void menu(){
     printf("1) Ajouter un etudiant\n");
     printf("2) modifier les informations d'un etudiant\n");
     printf("3) suprimer les details d'un etudiant \n");
-    printf("4) Afficher les details d'un etudiant \n");
+    printf("4) Afficher l list des  etudiants \n");
     printf("5) La moyenne generale\n");
     printf("6) Statistique\n");
     printf("7) Recherche un etudiant par son nom\n");
@@ -104,7 +104,6 @@ void Modifier() {
     int found=0;
     verification();
     int index = verification();
-    printf("indice est :%d",index);
 
         for(i = index ; i <nbr_total ; i++){
             if(index != -1)
@@ -130,6 +129,7 @@ void Modifier() {
 
     printf("\n");
 }
+
 void Supprime(){
     int index = verification();
     printf("indice est :%d",index);
@@ -186,7 +186,7 @@ void AffNomReusParDep() {
         }
     }
 
-    // Afficher les résultats
+                                                         // Afficher les resultats
     printf("Nombre d'etudiants ayant reussi dans chaque departement :\n");
     for (int i = 0; i < nb_departements; i++) {
         printf("Departement %s : %d etudiant(s) ayant reussi\n", departements[i], nombres_reussite[i]);
@@ -194,8 +194,8 @@ void AffNomReusParDep() {
 }
 void moyenneGeneralTotal()
 {
-    int total_departements=0;
-    float somme_generale=0,moyenne_depp;
+    int total_departements=0, CountDep = 0;
+    float somme_generale=0,moyenne_depp = 0;
 
    char T[20][50];
 
@@ -210,7 +210,6 @@ void moyenneGeneralTotal()
                   goto point ;
                   }
              }
-
           if (p==1)
           {
             printf("%s\n",etudiant[i].departement);
@@ -224,6 +223,7 @@ void moyenneGeneralTotal()
       {
         float somme=0;
         int lenghDep =0;
+
         for( int j=0;j<nbr_total;j++)
         {
             if (strcmp(T[i],etudiant[j].departement)==0)
@@ -233,7 +233,7 @@ void moyenneGeneralTotal()
             }
 
         }
-        moyenne_depp=somme/ lenghDep;
+        moyenne_depp = somme/ lenghDep;
         printf("departement %d %s %.2f \n ",i+1,etudiant[i].departement,moyenne_depp);
         somme_generale =somme_generale+ moyenne_depp;
         total_departements++;
@@ -242,6 +242,7 @@ void moyenneGeneralTotal()
       float moyenne_generale = somme_generale/total_departements;
     printf("Moyenne generale de tous les departements: %.2f\n", moyenne_generale);
 }
+
 void Affichage_Liste_etudient(){
     for(i=0;i<nbr_total;i++){
         printf("-----------------------<L'etudient %d>------------------------------- \n",etudiant[i].nombre_unique);
@@ -305,6 +306,7 @@ void Rech_nom()                         //recherche
     }
         printf("\n");
 }
+
 void TriEtudParNom() {
     list_etudiant temp;
     for (int i = 0; i < nbr_total - 1; i++) {
@@ -318,6 +320,7 @@ void TriEtudParNom() {
         }
     }
 }
+
 void TriEtudParNote() {
     list_etudiant temp;
     for (int i = 0; i < nbr_total - 1; i++) {
@@ -331,9 +334,10 @@ void TriEtudParNote() {
         }
     }
 }
+
 void Aff_Nbr_Etud_Deppa() {
-    char departements[100][50];                      // Tableau de stocker les noms des departements
-    int nombres[100] = {0};                          // Tableau de stocker les comptes d'etudiants de chaque departement
+    char departements[20][50];                      // Tableau de stocker les noms des departements
+    int nombres[20] = {0};                          // Tableau de stocker les comptes d'etudiants de chaque departement
     int nb_departements = 0;
 
                                                     // Remplir les departements
@@ -437,11 +441,10 @@ int option;
 
         switch (choix)
         {
-        case 1: ajouter();
-            break;
-
-        case 2: Modifier();
-           break;
+         case 1: ajouter();
+         break;
+         case 2: Modifier();
+         break;
          case 3: Supprime();
          break;
          case 4:
@@ -455,40 +458,39 @@ int option;
 
          case 6 :
          {
-               int OptionChoix;
-            do
-        {
+                  int OptionChoix;
+                  do
+                {
+                  printf("---------------< MENU >---------------\n");
 
+                  printf("1) Affichage le nombre des etudiants\n");
+                  printf("2) Affiche nombre total dans chaque departement\n");
+                  printf("3) Afficher les etudians ayant une note general superieur a une seuil \n");
+                  printf("4) Les 3 premiers  etudiants \n");
+                  printf("5) Affichage du nombre d'étudiants ayant réussi dans chaque departement\n");
+                  printf("Choisissez une option : ");
+                  scanf("%d", &OptionChoix);
+                  switch(OptionChoix){
+                        case 0 : printf("sortir");
+                        break;
+                        case 1 : affichage_NbrTotal_etud();
+                        break;
+                        case 2 : Aff_Nbr_Etud_Deppa();
+                        break;
+                        case 3 : Aff_etu_SUP_seuil();
+                        break;
+                        case 4 : Affich_PreM3();
+                        break;
+                        case 5 : AffNomReusParDep();
+                        break;
 
+                        default : printf("incorrecte choix!");
+                        break;
 
-          printf("---------------< MENU >---------------\n");
-          printf("1) Affichage le nombre des etudiants\n");
-          printf("2) Affiche nombre total dans chaque departement\n");
-          printf("3) Afficher les etudians ayant une note general superieur a une seuil \n");
-          printf("4) Les 3 premiers  etudiants \n");
-          printf("5) Affichage du nombre d'étudiants ayant réussi dans chaque departement\n");
-          printf("Choisissez une option : ");
-          scanf("%d", &OptionChoix);
-           switch(OptionChoix){
-            case 1 : affichage_NbrTotal_etud();
-            break;
-            case 2 : Aff_Nbr_Etud_Deppa();
-            break;
-            case 3 : Aff_etu_SUP_seuil();
-            break;
-            case 4 : Affich_PreM3();
-            break;
-            case 5 : AffNomReusParDep();
-            break;
-            case 0 : printf("sortir");
-            break;
-            default : printf("incorrecte choix!");
-            break;
-
-            }
-         }while (OptionChoix!=0);
-         break;
-         }
+                   }
+               }while (OptionChoix!=0);
+                break;
+                 }
 
          case 7: Rech_nom()  ;
          break;
@@ -527,7 +529,7 @@ int option;
             break;
 
             }
-         }while (option!=0);
+         }while (option == 0);
 
         break;
 
