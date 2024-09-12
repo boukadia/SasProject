@@ -162,36 +162,52 @@ void  Aff_etu_SUP_seuil(){
         }
     }
 }
+void Affichage_Liste_etudient(){
+    for(i=0;i<nbr_total;i++){
+        printf("-----------------------<L'etudient %d>------------------------------- \n",etudiant[i].nombre_unique);
 
-void AffNomReusParDep() {
-    char departements[100][50];                         // Tableau pour stocker les noms des départements
-    int nombres_reussite[100] = {0};                     // Tableau pour stocker les comptes d'étudiants ayant réussi dans chaque département
-    int nb_departements = 0;
-
-                                                         // Remplir les departements et compter les reussit
-    for (int i = 0; i < nbr_total; i++) {
-        if (etudiant[i].note_generale >= 10) {           // On considere comme reussi si la note est >= 10
-            int j;
-            for (j = 0; j < nb_departements; j++) {
-                if (strcmp(departements[j], etudiant[i].departement) == 0) {
-                    nombres_reussite[j]++;
-                    break;
-                }
-            }
-            if (j == nb_departements) {
-                strcpy(departements[nb_departements], etudiant[i].departement);
-                nombres_reussite[nb_departements] = 1;
-                nb_departements++;
-            }
-        }
-    }
-
-                                                         // Afficher les resultats
-    printf("Nombre d'etudiants ayant reussi dans chaque departement :\n");
-    for (int i = 0; i < nb_departements; i++) {
-        printf("Departement %s : %d etudiant(s) ayant reussi\n", departements[i], nombres_reussite[i]);
-    }
+        printf(" Nom:                      %s\n",etudiant[i].nom);
+         printf(" prenom:                  %s\n",etudiant[i].prenom);
+        printf(" La Note general:          %.2f \n",etudiant[i].note_generale);
+        printf(" La date de naissance:     %d %d %d\n",etudiant[i].date_de_naissance.jour,etudiant[i].date_de_naissance.mois,etudiant[i].date_de_naissance.annee);
+        printf(" Le departement: %s\n",etudiant[i].departement);
 }
+}
+void Rech_nom()                         //recherche
+{
+    int i;
+    char rech[50];
+    printf("tapez le nom d'etudiant ");
+    scanf(" %[^\n]s", &rech);
+    int disponible = 0;
+    for (i = 0; i < nbr_total; i++)
+    {
+        if (strcmp(rech,etudiant[i].nom)==0)
+        {
+            disponible = 1;
+            break;
+        }
+        else
+            disponible = 0;
+    }
+    if (disponible == 1)
+    {
+        printf("on a trouver ce nom");
+         printf("L'etudient a numero %d \n",etudiant[i].nombre_unique);
+        printf(" Nom:       %s\n",etudiant[i].nom);
+         printf(" prenom:       %s\n",etudiant[i].prenom);
+        printf(" La Note general:      %f \n",etudiant[i].note_generale);
+        printf(" La date de naissance:   %d %d %d\n",etudiant[i].date_de_naissance.jour,etudiant[i].date_de_naissance.mois,etudiant[i].date_de_naissance.annee);
+        printf(" Le departement: %s\n",etudiant[i].departement);
+
+    }
+    else
+    {
+        printf("ce nom n'existe pas \n");
+    }
+        printf("\n");
+}
+
 void moyenneGeneralTotal()
 {
     int total_departements=0, CountDep = 0;
@@ -243,68 +259,34 @@ void moyenneGeneralTotal()
     printf("Moyenne generale de tous les departements: %.2f\n", moyenne_generale);
 }
 
-void Affichage_Liste_etudient(){
-    for(i=0;i<nbr_total;i++){
-        printf("-----------------------<L'etudient %d>------------------------------- \n",etudiant[i].nombre_unique);
+void AffNomReusParDep() {
+    char departements[100][50];                         // Tableau pour stocker les noms des départements
+    int nombres_reussite[100] = {0};                     // Tableau pour stocker les comptes d'étudiants ayant réussi dans chaque département
+    int nb_departements = 0;
 
-        printf(" Nom:                      %s\n",etudiant[i].nom);
-         printf(" prenom:                  %s\n",etudiant[i].prenom);
-        printf(" La Note general:          %.2f \n",etudiant[i].note_generale);
-        printf(" La date de naissance:     %d %d %d\n",etudiant[i].date_de_naissance.jour,etudiant[i].date_de_naissance.mois,etudiant[i].date_de_naissance.annee);
-        printf(" Le departement: %s\n",etudiant[i].departement);
-}
-}
-
-void affichage_les_3Premier () {
-    {
-    for(i=0;i<nbr_total;i++){
-
-
-        printf(" Nom:                      %s\n",etudiant[i].nom);
-         printf(" prenom:                  %s\n",etudiant[i].prenom);
-        printf(" La Note general:          %.2f \n",etudiant[i].note_generale);
-        printf(" La date de naissance:     %d %d %d\n",etudiant[i].date_de_naissance.jour,etudiant[i].date_de_naissance.mois,etudiant[i].date_de_naissance.annee);
-        printf(" Le departement: %s\n",etudiant[i].departement);
-}
-}
-
-}
-
-
-
-void Rech_nom()                         //recherche
-{
-    int i;
-    char rech[50];
-    printf("tapez le nom d'etudiant ");
-    scanf(" %[^\n]s", &rech);
-    int disponible = 0;
-    for (i = 0; i < nbr_total; i++)
-    {
-        if (strcmp(rech,etudiant[i].nom)==0)
-        {
-            disponible = 1;
-            break;
+                                                         // Remplir les departements et compter les reussit
+    for (int i = 0; i < nbr_total; i++) {
+        if (etudiant[i].note_generale >= 10) {           // On considere comme reussi si la note est >= 10
+            int j;
+            for (j = 0; j < nb_departements; j++) {
+                if (strcmp(departements[j], etudiant[i].departement) == 0) {
+                    nombres_reussite[j]++;
+                    break;
+                }
+            }
+            if (j == nb_departements) {
+                strcpy(departements[nb_departements], etudiant[i].departement);
+                nombres_reussite[nb_departements] = 1;
+                nb_departements++;
+            }
         }
-        else
-            disponible = 0;
     }
-    if (disponible == 1)
-    {
-        printf("on a trouver ce nom");
-         printf("L'etudient a numero %d \n",etudiant[i].nombre_unique);
-        printf(" Nom:       %s\n",etudiant[i].nom);
-         printf(" prenom:       %s\n",etudiant[i].prenom);
-        printf(" La Note general:      %f \n",etudiant[i].note_generale);
-        printf(" La date de naissance:   %d %d %d\n",etudiant[i].date_de_naissance.jour,etudiant[i].date_de_naissance.mois,etudiant[i].date_de_naissance.annee);
-        printf(" Le departement: %s\n",etudiant[i].departement);
 
+                                                         // Afficher les resultats
+    printf("Nombre d'etudiants ayant reussi dans chaque departement :\n");
+    for (int i = 0; i < nb_departements; i++) {
+        printf("Departement %s : %d etudiant(s) ayant reussi\n", departements[i], nombres_reussite[i]);
     }
-    else
-    {
-        printf("ce nom n'existe pas \n");
-    }
-        printf("\n");
 }
 
 void TriEtudParNom() {
